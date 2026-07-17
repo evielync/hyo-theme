@@ -422,7 +422,7 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.3;
   margin: 1.2em 0 0.8em;
-  color: #2D2A26 !important;
+  color: #D97757 !important;
   padding-bottom: 0.3em;
   border-bottom: 2px solid #D97757;
 }
@@ -439,7 +439,7 @@ body {
   letter-spacing: -0.01em;
   line-height: 1.3;
   margin: 1.2em 0 0.4em;
-  color: #C15F3C !important;
+  color: #D97757 !important;
 }
 
 .markdown-rendered h3,
@@ -448,13 +448,13 @@ body {
   font-weight: 600;
   line-height: 1.3;
   margin: 1.2em 0 0.4em;
-  color: #7A7268 !important;
+  color: #D97757 !important;
 }
 
 /* Dark mode heading colours */
 .theme-dark .markdown-rendered h1,
 .theme-dark .markdown-source-view.mod-cm6 .HyperMD-header-1 {
-  color: #E8E4DE !important;
+  color: #D97757 !important;
   border-bottom-color: #D97757;
 }
 
@@ -465,7 +465,7 @@ body {
 
 .theme-dark .markdown-rendered h3,
 .theme-dark .markdown-source-view.mod-cm6 .HyperMD-header-3 {
-  color: #A8A29A !important;
+  color: #D97757 !important;
 }
 
 /* Lists — outline-grade visual hierarchy */
