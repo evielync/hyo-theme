@@ -747,7 +747,7 @@ button.mod-cta:hover {
 /* ── Custom callout: [!comment] — margin notes to self ──── */
 
 .callout[data-callout="comment"] {
-  --callout-color: 217, 119, 87;
+  --callout-color: rgb(217, 119, 87);
   --callout-icon: message-circle;
   background: rgba(217, 119, 87, 0.10) !important;
   border-width: 0 0 0 3px !important;
