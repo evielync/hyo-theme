@@ -798,6 +798,30 @@ textarea {
 .graph-view.color-fill-attachment { color: #6B9E7A; }
 .graph-view.color-fill-unresolved { color: var(--text-faint); }
 
+/* ── Tables — tighten cell padding in Live Preview ─────── */
+
+.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper {
+  padding: 4px 8px;
+}
+
+/* Kill the bloated padding on the embedded CM editor
+   that Obsidian injects when you click into a cell */
+.cm-table-widget .cm-editor {
+  padding: 0;
+}
+
+.cm-table-widget .cm-editor .cm-scroller {
+  padding: 0;
+}
+
+.cm-table-widget .cm-editor .cm-content {
+  padding: 0;
+}
+
+.cm-table-widget .cm-editor .cm-content .cm-line {
+  padding: 0;
+}
+
 /* ── Bases — full width ─────────────────────────────────── */
 
 .bases-embed,
