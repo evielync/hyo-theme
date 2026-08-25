@@ -861,3 +861,148 @@ textarea {
 .bases-view th {
   text-align: left !important;
 }
+
+
+/* ── Mobile — drawers ───────────────────────────────────── */
+
+/* Phone: sidebars cover the full screen. (Tablet keeps its
+   floating-panel width.) */
+.is-phone {
+  --mobile-sidebar-width: 100%;
+}
+
+/* Left drawer — vault profile + settings at the top (phone + tablet) */
+.is-mobile .workspace-drawer.mod-left .workspace-drawer-header {
+  order: -1;
+  padding-bottom: var(--size-4-3);
+}
+
+/* Right drawer — hide the header on phone (it only shows the
+   current document's name there). On tablet the header stays:
+   it holds the pin button, and pinning is what the wider-sidebar
+   snippet keys off. */
+.is-phone .workspace-drawer.mod-right .workspace-drawer-header {
+  display: none;
+}
+
+/* Tab picker button — Cosmos-style: quiet, left-aligned, no grey
+   pill (ported from the Cosmos theme's treatment) */
+.is-mobile .workspace-drawer .workspace-drawer-tab-options .workspace-drawer-tab-select .workspace-tab-header-inner {
+  background-color: transparent;
+  justify-content: flex-start;
+}
+.is-mobile .workspace-drawer .workspace-drawer-tab-select .workspace-tab-header-inner-title {
+  flex: unset;
+  width: auto;
+}
+.is-phone .workspace-drawer-tab-select {
+  height: 100%;
+}
+
+/* Tab picker sits at the bottom on tablet too (stock already
+   does this on phone) */
+.is-tablet .workspace-drawer-tab-options {
+  order: 2;
+}
+
+/* Phone: remove the drawer's own bottom padding so the bottom
+   chrome (dropdown or icon bar) sits flush; each handles its own
+   home-indicator clearance below */
+.is-phone .workspace-drawer-inner {
+  padding-bottom: 0;
+}
+
+/* Left drawer keeps the stock dropdown (with one tab it just reads
+   "Daily OS") — give it back the home-indicator clearance the inner
+   padding used to provide */
+.is-phone .workspace-drawer.mod-left .workspace-drawer-tab-options {
+  margin-bottom: max(var(--size-4-2), var(--safe-area-inset-bottom));
+}
+
+/* ── Right drawer — permanent icon bar ──────────────────────
+   Applies with up to 8 tabs. At 9+ the :not(:has()) guard stops
+   matching and everything below reverts to the stock dropdown,
+   which handles long lists better than a cramped icon row. */
+
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-select {
+  display: none;
+}
+
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+  position: static;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size-4-1);
+  max-height: none;
+  opacity: 1;
+  pointer-events: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding: var(--size-4-2);
+  background-color: transparent;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Phone: icon bar hugs the bottom, clearing the home indicator */
+.is-phone .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+  padding-bottom: max(var(--size-4-2), var(--safe-area-inset-bottom));
+}
+
+/* Icons only — no labels, no chevrons, no close buttons */
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-title,
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-chevron,
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-close-button {
+  display: none;
+}
+
+/* Even, comfortable touch targets across the row */
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header {
+  flex: 1 1 0;
+  min-width: var(--touch-size-m);
+}
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner {
+  justify-content: center;
+  padding: var(--size-4-3);
+  border-radius: var(--radius-m);
+}
+
+/* Active tab — Hyo accent */
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background-color: var(--background-modifier-hover);
+}
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner-icon {
+  color: var(--color-accent);
+  --icon-color: var(--color-accent);
+}
+
+/* Plugin views in mobile drawers inherit Obsidian's generic 32px+
+   view-content bottom padding (core views zero it per-type) — the
+   drawer chrome owns bottom spacing now, so drop it */
+.is-mobile .workspace-drawer .workspace-leaf-content .view-content {
+  padding-bottom: 0;
+}
+
+/* Tablet right drawer — fold the header buttons (pin, sync) into the
+   bottom icon-bar line: hide the doc-name text, float the buttons over
+   the right end of the bar, and clear space in the tab list so they
+   never overlap. Guarded like the icon bar itself — with 9+ tabs the
+   dropdown returns and the header reverts to a normal top header. */
+.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-header .workspace-drawer-header-left {
+  display: none;
+}
+.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-header {
+  position: absolute;
+  inset: auto var(--size-4-3) var(--size-4-4) auto;
+  padding: 0;
+  z-index: 2;
+  gap: var(--size-4-2);
+  align-items: center;
+}
+/* Room for two header buttons at the bar's right end.
+   width: auto is required — Obsidian's base rule sets width: 100%,
+   which makes the margin overflow instead of clearing space. */
+.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+  width: auto;
+  margin-right: calc(2 * var(--touch-size-m) + var(--size-4-3));
+}
