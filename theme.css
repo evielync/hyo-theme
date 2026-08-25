@@ -863,6 +863,36 @@ textarea {
 }
 
 
+/* ── Mobile — modals & prompts ──────────────────────────────
+   Stock phone rules strip the popup container: modal border and
+   shadow are zeroed, the page dim is a faint 15% (near-invisible
+   in dark mode), and prompts go 90% translucent expecting a
+   backdrop blur that phones don't apply. Result: popup content
+   floats straight over the note with no bounding box. Draw the
+   container back. */
+
+/* Prompts — quick capture, switcher, suggesters: solid + bounded */
+.is-mobile .prompt {
+  background-color: var(--background-primary);
+  border: var(--border-width) solid var(--background-modifier-border);
+  box-shadow: var(--shadow-l);
+}
+
+/* Modals — date pickers, dialogs: edge + lift restored */
+.is-phone .modal {
+  border: var(--border-width) solid var(--background-modifier-border);
+  box-shadow: 0 -8px 40px rgba(30, 25, 20, 0.18);
+}
+
+/* Stronger page dim behind popups — warm ink, not grey */
+.is-mobile {
+  --background-modifier-cover: rgba(43, 38, 33, 0.35);
+}
+.is-mobile.theme-dark {
+  --background-modifier-cover: rgba(0, 0, 0, 0.5);
+}
+
+
 /* ── Mobile — drawers ───────────────────────────────────── */
 
 /* Phone: sidebars cover the full screen. (Tablet keeps its
