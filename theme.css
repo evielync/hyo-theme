@@ -774,9 +774,25 @@ button.mod-cta:hover {
 input[type="text"],
 input[type="search"],
 input[type="email"],
-input[type="password"],
-textarea {
+input[type="password"] {
   border-radius: var(--input-radius);
+}
+
+/* Multi-line boxes keep their own, smaller corner. On phones Obsidian
+   makes --input-radius very round for one-line fields; applied to a
+   textarea that turns every comment or note box into a pill and clips
+   the text in the corners. */
+textarea {
+  border-radius: var(--textarea-radius, var(--input-radius));
+}
+
+.is-mobile {
+  --textarea-radius: 8px;
+}
+
+/* 16px text stops iOS zooming the page when a box is tapped */
+.is-phone textarea {
+  font-size: max(16px, 1em);
 }
 
 .search-input-container input:focus {
