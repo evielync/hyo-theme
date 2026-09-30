@@ -778,15 +778,14 @@ input[type="password"] {
   border-radius: var(--input-radius);
 }
 
-/* Multi-line boxes keep their own, smaller corner. On phones Obsidian
-   makes --input-radius very round for one-line fields; applied to a
-   textarea that turns every comment or note box into a pill and clips
-   the text in the corners. */
 textarea {
   border-radius: var(--textarea-radius, var(--input-radius));
 }
 
+/* Phones get the same corners as the Mac. Obsidian's phone default
+   makes one-line fields pill-shaped. */
 .is-mobile {
+  --input-radius: 8px;
   --textarea-radius: 8px;
 }
 
