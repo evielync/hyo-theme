@@ -244,21 +244,28 @@ body {
 
 /* ── Tabs ───────────────────────────────────────────────── */
 
-/* Active tab — warm background, terracotta title via CSS var + direct selector */
+/* Active tab — warm background. The .workspace-prefixed selectors
+   outrank Obsidian's sidebar rules, which otherwise swap in the
+   plain hover grey (including while hovered). */
 .workspace-tab-header.is-active,
-.workspace-tab-header.is-active.mod-active {
-  background-color: var(--tab-background-active) !important;
+.workspace .workspace-tab-header-container .workspace-tab-header.is-active,
+.workspace .workspace-tab-header-container .workspace-tab-header.is-active:hover {
+  background-color: var(--tab-background-active);
 }
 
-.workspace-tab-header.is-active .workspace-tab-header-inner-title,
-.workspace-tab-header.is-active.mod-active .workspace-tab-header-inner-title {
-  color: var(--interactive-accent) !important;
+/* Active tab title — terracotta. Obsidian colours the focused pane's
+   title through --tab-text-color-focused-active-current, so set it on
+   the title alone (the tab icon keeps its normal colour). */
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+  --tab-text-color-focused-active-current: var(--interactive-accent);
+  --tab-text-color-focused-highlighted: var(--interactive-accent);
+  color: var(--interactive-accent);
   font-weight: 500;
 }
 
 /* Modified/unsaved dot — accent colour */
 .workspace-tab-header-status-icon {
-  color: var(--interactive-accent) !important;
+  color: var(--interactive-accent);
 }
 
 /* ── File explorer ──────────────────────────────────────── */
@@ -276,21 +283,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Folders */
+/* Folders. --nav-item-weight-hover keeps the weight steady on hover
+   (Obsidian's hover rule reads it). */
 .nav-folder-title {
   font-weight: 500;
   color: var(--text-normal);
+  --nav-item-weight-hover: 500;
 }
 
 .nav-folder-title:hover {
   color: var(--text-normal);
   background: var(--background-modifier-hover);
-  font-weight: 500 !important;
 }
 
 /* Folder collapse arrow — warm brown */
-.nav-folder-collapse-indicator {
-  color: #C15F3C !important;
+.nav-folder-title .nav-folder-collapse-indicator {
+  color: #C15F3C;
 }
 
 /* Folder icon — exact Hyo path, fill #D97757 stroke #C15F3C, 20×20 */
@@ -310,12 +318,13 @@ body {
 /* Files */
 .nav-file-title {
   font-weight: 450;
+  --nav-item-weight-hover: 450;
 }
 
 .nav-file-title:hover {
   color: var(--text-normal);
   background: var(--background-modifier-hover);
-  font-weight: 450 !important;
+  font-weight: 450;
 }
 
 /* File icon — document shape SVG matching Hyo's getFileIcon exactly.
@@ -380,8 +389,8 @@ body {
 
 /* Active file — accent treatment */
 .nav-file-title.is-active {
-  color: var(--text-accent) !important;
-  background: rgba(217, 119, 87, 0.1) !important;
+  color: var(--text-accent);
+  background: rgba(217, 119, 87, 0.1);
   font-weight: 500;
 }
 
@@ -414,7 +423,16 @@ body {
   margin: 0 0 0.75em;
 }
 
-/* Headings — coloured text + accent borders */
+/* Headings — peach in both modes, set through Obsidian's own heading
+   colour variables. Scoped to notes so plugin and settings headings
+   keep their normal colour. */
+.markdown-rendered,
+.markdown-source-view.mod-cm6 {
+  --h1-color: #D97757;
+  --h2-color: #D97757;
+  --h3-color: #D97757;
+}
+
 .markdown-rendered h1,
 .markdown-source-view.mod-cm6 .HyperMD-header-1 {
   font-size: 1.8em;
@@ -422,14 +440,15 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.3;
   margin: 1.2em 0 0.8em;
-  color: #D97757 !important;
   padding-bottom: 0.3em;
   border-bottom: 2px solid #D97757;
 }
 
-/* Space below H1 border — push the next line down */
+/* Space below H1 border — push the next line down. Obsidian's own
+   after-a-heading spacing reads --p-spacing-empty, so set both. */
 .markdown-source-view.mod-cm6 .HyperMD-header-1 + .cm-line {
-  padding-top: 12px !important;
+  padding-top: 12px;
+  --p-spacing-empty: 12px;
 }
 
 .markdown-rendered h2,
@@ -439,7 +458,6 @@ body {
   letter-spacing: -0.01em;
   line-height: 1.3;
   margin: 1.2em 0 0.4em;
-  color: #D97757 !important;
 }
 
 .markdown-rendered h3,
@@ -448,24 +466,6 @@ body {
   font-weight: 600;
   line-height: 1.3;
   margin: 1.2em 0 0.4em;
-  color: #D97757 !important;
-}
-
-/* Dark mode heading colours */
-.theme-dark .markdown-rendered h1,
-.theme-dark .markdown-source-view.mod-cm6 .HyperMD-header-1 {
-  color: #D97757 !important;
-  border-bottom-color: #D97757;
-}
-
-.theme-dark .markdown-rendered h2,
-.theme-dark .markdown-source-view.mod-cm6 .HyperMD-header-2 {
-  color: #D97757 !important;
-}
-
-.theme-dark .markdown-rendered h3,
-.theme-dark .markdown-source-view.mod-cm6 .HyperMD-header-3 {
-  color: #D97757 !important;
 }
 
 /* Lists — outline-grade visual hierarchy */
@@ -492,13 +492,14 @@ body {
 }
 
 /* Bullet markers — distinct shapes per level (reading view) */
-.markdown-rendered ul { list-style: none !important; }
+.markdown-rendered ul,
+.markdown-rendered ul.has-list-bullet { list-style: none; }
 
 .markdown-rendered ul > li { position: relative; padding-left: 0.4em; }
 
 /* Level 1: filled circle */
 .markdown-rendered ul > li::before {
-  content: "" !important;
+  content: "";
   position: absolute;
   left: -1.2em;
   top: 0.55em;
@@ -536,12 +537,12 @@ body {
 
 /* Ordered list markers */
 .markdown-rendered ol > li::marker {
-  color: #D97757 !important;
+  color: #D97757;
   font-weight: 600;
 }
 
 .markdown-rendered ol > li li::marker {
-  color: #7A7268 !important;
+  color: #7A7268;
   font-weight: 500;
 }
 
@@ -554,81 +555,83 @@ body {
 /* ── Lists — Live Preview / Editor ─────────────────────── */
 /* Distinct shapes per level, generous spacing, prominent markers */
 
-/* Spacing — tighter */
+/* Spacing — tighter. --p-spacing-empty covers a list that starts
+   straight after a heading, where Obsidian's spacing rule reads it. */
 .markdown-source-view.mod-cm6 .HyperMD-list-line-1 {
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  --p-spacing-empty: 2px;
 }
 
-.markdown-source-view.mod-cm6 .HyperMD-list-line-2 {
-  padding-top: 1px !important;
-  padding-bottom: 1px !important;
-}
-
+.markdown-source-view.mod-cm6 .HyperMD-list-line-2,
 .markdown-source-view.mod-cm6 .HyperMD-list-line-3,
 .markdown-source-view.mod-cm6 .HyperMD-list-line-4 {
-  padding-top: 1px !important;
-  padding-bottom: 1px !important;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  --p-spacing-empty: 1px;
 }
 
 /* Hide indent guide lines in editor */
 .markdown-source-view.mod-cm6 .cm-indent::before {
-  border-color: transparent !important;
+  border-color: transparent;
 }
 
 /* ── Bullet colours + shapes per nesting level ── */
 
 /* All levels: set marker colour variable */
 .markdown-source-view.mod-cm6 .HyperMD-list-line-1 {
-  --list-marker-color: #D97757 !important;
+  --list-marker-color: #D97757;
 }
 .markdown-source-view.mod-cm6 .HyperMD-list-line-2 {
-  --list-marker-color: #C15F3C !important;
+  --list-marker-color: #C15F3C;
 }
 .markdown-source-view.mod-cm6 .HyperMD-list-line-3 {
-  --list-marker-color: #7A7268 !important;
+  --list-marker-color: #7A7268;
 }
 .markdown-source-view.mod-cm6 .HyperMD-list-line-4 {
-  --list-marker-color: #A69E94 !important;
+  --list-marker-color: #A69E94;
 }
 
 /* Gap between dot and text */
 .markdown-source-view.mod-cm6 .list-bullet {
-  margin-right: 6px !important;
+  margin-right: 6px;
 }
 
+/* Bullet shapes. The .cm-line in each selector outranks Obsidian's
+   collapsed and hover bullet rules, so the shapes hold in every state. */
+
 /* Level 1: filled circle */
-.markdown-source-view.mod-cm6 .HyperMD-list-line-1 .list-bullet::after {
-  width: 6px !important;
-  height: 6px !important;
-  border-radius: 50% !important;
-  background-color: #D97757 !important;
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-list-line-1 .list-bullet::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #D97757;
 }
 
 /* Level 2: open circle */
-.markdown-source-view.mod-cm6 .HyperMD-list-line-2 .list-bullet::after {
-  width: 6px !important;
-  height: 6px !important;
-  border-radius: 50% !important;
-  background-color: transparent !important;
-  border: 1.5px solid #C15F3C !important;
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-list-line-2 .list-bullet::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1.5px solid #C15F3C;
 }
 
 /* Level 3: filled square */
-.markdown-source-view.mod-cm6 .HyperMD-list-line-3 .list-bullet::after {
-  width: 5px !important;
-  height: 5px !important;
-  border-radius: 1px !important;
-  background-color: #7A7268 !important;
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-list-line-3 .list-bullet::after {
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  background-color: #7A7268;
 }
 
 /* Level 4: open circle — faint */
-.markdown-source-view.mod-cm6 .HyperMD-list-line-4 .list-bullet::after {
-  width: 5px !important;
-  height: 5px !important;
-  border-radius: 50% !important;
-  background-color: transparent !important;
-  border: 1.5px solid #A69E94 !important;
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-list-line-4 .list-bullet::after {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 1.5px solid #A69E94;
 }
 
 /* ── Links ──────────────────────────────────────────────── */
@@ -673,7 +676,7 @@ button.mod-cta:hover {
 
 .markdown-rendered hr,
 .cm-line.hr hr {
-  border: none !important;
+  border: none;
   height: 40px;
   position: relative;
   overflow: visible;
@@ -725,23 +728,52 @@ button.mod-cta:hover {
   font-style: italic;
 }
 
-/* Editor / Live Preview blockquote styling */
+/* Editor / Live Preview blockquote styling. Obsidian's Live Preview
+   rule paints the quote with --blockquote-background-color. */
 .markdown-source-view.mod-cm6 .HyperMD-quote {
-  background-color: rgba(217, 119, 87, 0.10) !important;
+  --blockquote-background-color: rgba(217, 119, 87, 0.10);
+  background-color: var(--blockquote-background-color);
   font-style: italic;
 }
 
 /* First line of a quote group — top padding + top-right corner */
 .markdown-source-view.mod-cm6 :not(.HyperMD-quote) + .HyperMD-quote {
-  padding-top: 6px !important;
+  padding-top: 6px;
+  --p-spacing-empty: 6px;
   border-top-right-radius: var(--radius-s);
 }
 
-/* Last line of a quote group — bottom padding + bottom-right corner */
-.markdown-source-view.mod-cm6 .HyperMD-quote:has(+ :not(.HyperMD-quote)),
+/* Bottom of a quote group — 6px of quote below the last line, with a
+   rounded bottom-right corner. A plain selector can't pick out "the
+   last quote line before something else", so the line AFTER the group
+   carries it: a 6px top border makes the room, and a strip painted
+   into that border continues the quote's background and accent line. */
 .markdown-source-view.mod-cm6 .HyperMD-quote:last-child {
-  padding-bottom: 6px !important;
+  padding-bottom: 6px;
   border-bottom-right-radius: var(--radius-s);
+}
+
+.markdown-source-view.mod-cm6 .HyperMD-quote + .cm-line:not(.HyperMD-quote),
+.markdown-source-view.mod-cm6 .HyperMD-quote + .cm-embed-block {
+  border-top: 6px solid transparent;
+}
+
+.markdown-source-view.mod-cm6 .HyperMD-quote + .cm-line:not(.HyperMD-quote)::before,
+.markdown-source-view.mod-cm6 .HyperMD-quote + .cm-embed-block::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-color: rgba(217, 119, 87, 0.10);
+  border-bottom-right-radius: var(--radius-s);
+  pointer-events: none;
+}
+
+.markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote + .cm-line:not(.HyperMD-quote)::before,
+.markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote + .cm-embed-block::before {
+  border-inline-start: var(--blockquote-border-thickness) solid var(--blockquote-border-color);
 }
 
 /* ── Custom callout: [!comment] — margin notes to self ──── */
@@ -749,12 +781,12 @@ button.mod-cta:hover {
 .callout[data-callout="comment"] {
   --callout-color: 217, 119, 87;
   --callout-icon: message-circle;
-  background: rgba(217, 119, 87, 0.10) !important;
-  border-width: 0 0 0 3px !important;
-  border-style: solid !important;
-  border-color: rgba(217, 119, 87, 0.6) !important;
-  border-radius: 0 var(--radius-s) var(--radius-s) 0 !important;
-  box-shadow: none !important;
+  background: rgba(217, 119, 87, 0.10);
+  border-width: 0 0 0 3px;
+  border-style: solid;
+  border-color: rgba(217, 119, 87, 0.6);
+  border-radius: 0 var(--radius-s) var(--radius-s) 0;
+  box-shadow: none;
 }
 
 .callout[data-callout="comment"] .callout-content {
@@ -839,24 +871,19 @@ textarea {
 
 /* ── Bases — full width ─────────────────────────────────── */
 
+/* Obsidian sizes embedded bases through --bases-embed-width, so set
+   it on the embed itself as well as the width. .cm-lang-base is the
+   Live Preview block that holds a ```base code block. */
 .bases-embed,
 .bases-view,
 .bases-container,
 .ob-base,
 .base-view,
-.cm-embed-block:has(.bases-embed),
-.cm-embed-block:has(.base-view) {
-  max-width: 100% !important;
-  width: 100% !important;
-}
-
-.is-readable-line-width .bases-embed,
-.is-readable-line-width .bases-view,
-.is-readable-line-width .bases-container,
-.is-readable-line-width .ob-base,
-.is-readable-line-width .base-view {
-  max-width: 100% !important;
-  width: 100% !important;
+.markdown-source-view.mod-cm6 .cm-content > .bases-embed,
+.markdown-source-view.mod-cm6 .cm-content > .cm-lang-base {
+  --bases-embed-width: 100%;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* ── Bases — table stretch + left-align ─────────────────── */
@@ -864,8 +891,8 @@ textarea {
 .ob-base table,
 .base-view table,
 .bases-view table {
-  width: 100% !important;
-  text-align: left !important;
+  width: 100%;
+  text-align: left;
 }
 
 .ob-base td,
@@ -874,7 +901,7 @@ textarea {
 .base-view th,
 .bases-view td,
 .bases-view th {
-  text-align: left !important;
+  text-align: left;
 }
 
 
@@ -965,15 +992,14 @@ textarea {
 }
 
 /* ── Right drawer — permanent icon bar ──────────────────────
-   Applies with up to 8 tabs. At 9+ the :not(:has()) guard stops
-   matching and everything below reverts to the stock dropdown,
-   which handles long lists better than a cramped icon row. */
+   The tab picker becomes a row of icons. When there are more tabs
+   than fit, the row scrolls sideways. */
 
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-select {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-select {
   display: none;
 }
 
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list {
   position: static;
   flex-direction: row;
   align-items: center;
@@ -990,33 +1016,33 @@ textarea {
 }
 
 /* Phone: icon bar hugs the bottom, clearing the home indicator */
-.is-phone .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+.is-phone .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list {
   padding-bottom: max(var(--size-4-2), var(--safe-area-inset-bottom));
 }
 
 /* Icons only — no labels, no chevrons, no close buttons */
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-title,
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-chevron,
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner-close-button {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header-inner-title,
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header-inner-chevron,
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header-inner-close-button {
   display: none;
 }
 
 /* Even, comfortable touch targets across the row */
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header {
   flex: 1 1 0;
   min-width: var(--touch-size-m);
 }
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header-inner {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header-inner {
   justify-content: center;
   padding: var(--size-4-3);
   border-radius: var(--radius-m);
 }
 
 /* Active tab — Hyo accent */
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner {
   background-color: var(--background-modifier-hover);
 }
-.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner-icon {
+.is-mobile .workspace-drawer.mod-right .workspace-drawer-tab-options .workspace-drawer-tab-options-list .workspace-tab-header.is-active .workspace-tab-header-inner-icon {
   color: var(--color-accent);
   --icon-color: var(--color-accent);
 }
@@ -1031,12 +1057,11 @@ textarea {
 /* Tablet right drawer — fold the header buttons (pin, sync) into the
    bottom icon-bar line: hide the doc-name text, float the buttons over
    the right end of the bar, and clear space in the tab list so they
-   never overlap. Guarded like the icon bar itself — with 9+ tabs the
-   dropdown returns and the header reverts to a normal top header. */
-.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-header .workspace-drawer-header-left {
+   never overlap. */
+.is-tablet .workspace-drawer.mod-right .workspace-drawer-header .workspace-drawer-header-left {
   display: none;
 }
-.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-header {
+.is-tablet .workspace-drawer.mod-right .workspace-drawer-header {
   position: absolute;
   inset: auto var(--size-4-3) var(--size-4-4) auto;
   padding: 0;
@@ -1047,7 +1072,7 @@ textarea {
 /* Room for two header buttons at the bar's right end.
    width: auto is required — Obsidian's base rule sets width: 100%,
    which makes the margin overflow instead of clearing space. */
-.is-tablet .workspace-drawer.mod-right:not(:has(.workspace-drawer-tab-options-list .workspace-tab-header:nth-child(9))) .workspace-drawer-tab-options-list {
+.is-tablet .workspace-drawer.mod-right .workspace-drawer-tab-options-list {
   width: auto;
   margin-right: calc(2 * var(--touch-size-m) + var(--size-4-3));
 }
